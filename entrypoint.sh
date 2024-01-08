@@ -28,4 +28,4 @@ fi
 helm package "./${HELM_CHART_DIR}"
 PACKAGE=("$HELM_CHART_DIR"-*)
 
-curl -v -F "file=@${PACKAGE}" -u "${HELM_REPOSITORY_USER}:${HELM_REPOSITORY_PASSWORD}" "https://${HELM_REPOSITORY_URL}/service/rest/v1/components?repository=${HELM_REPOSITORY_NAME}" $CURL_EXTRA_ARGS
+curl -u "${HELM_REPOSITORY_USER}:${HELM_REPOSITORY_PASSWORD}" -X POST "https://${HELM_REPOSITORY_URL}/api/chartrepo/${HELM_REPOSITORY_NAME}/charts" -H "Content-Type: multipart/form-data" -F "chart=@${PACKAGE}.tgz;type=application/x-compressed-tar" -H "accept: application/json" $CURL_EXTRA_ARGS
