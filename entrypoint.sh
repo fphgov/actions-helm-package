@@ -6,6 +6,7 @@ export HELM_REPOSITORY_USER=${INPUT_HELM_REPOSITORY_USER}
 export HELM_REPOSITORY_PASSWORD=${INPUT_HELM_REPOSITORY_PASSWORD}
 export HELM_REPOSITORY_INSECURE=${INPUT_HELM_REPOSITORY_INSECURE}
 export HELM_CHART_DIR=${INPUT_HELM_CHART_DIR:-"."}
+export HELM_EXPERIMENTAL_OCI=1
 
 function required() {
     if [ -z "${1}" ]; then
@@ -28,4 +29,6 @@ fi
 helm package "./${HELM_CHART_DIR}"
 PACKAGE=("$HELM_CHART_DIR"-*)
 
-curl -u "${HELM_REPOSITORY_USER}:${HELM_REPOSITORY_PASSWORD}" -X POST "https://${HELM_REPOSITORY_URL}/api/chartrepo/${HELM_REPOSITORY_NAME}/charts" -H "Content-Type: multipart/form-data" -F "chart=@${PACKAGE};type=application/x-compressed-tar" -H "accept: application/json" $CURL_EXTRA_ARGS
+echo "${HELM_REPOSITORY_PASSWORD}" | helm registry login ${HELM_REPOSITORY_URL} -u ${HELM_REPOSITORY_USER} --password-stdin --insecure 
+
+helm push ${PACKAGE} oci://${HELM_REPOSITORY_URL}/${HELM_REPOSITORY_NAME}
