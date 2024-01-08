@@ -31,4 +31,4 @@ PACKAGE=("$HELM_CHART_DIR"-*)
 
 echo "${HELM_REPOSITORY_PASSWORD}" | helm registry login ${HELM_REPOSITORY_URL} -u ${HELM_REPOSITORY_USER} --password-stdin --insecure 
 
-helm push ${PACKAGE} oci://${HELM_REPOSITORY_URL}/${HELM_REPOSITORY_NAME} --insecure
+helm push ${PACKAGE} oci://${HELM_REPOSITORY_URL}/${HELM_REPOSITORY_NAME} --plain-http
