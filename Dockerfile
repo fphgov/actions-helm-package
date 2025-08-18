@@ -1,4 +1,4 @@
-FROM fphgov/helm:3.9.0
+FROM harbor.budapest.hu/docker-hub/fphgov/helm:3.9.0
 
 COPY entrypoint.sh /entrypoint.sh
 
